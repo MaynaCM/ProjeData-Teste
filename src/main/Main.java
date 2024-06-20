@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 import java.time.Month;
@@ -48,6 +49,7 @@ public class Main {
                         case 9:
                             break;
                         case 10:
+                            mostrarSalarioMin();
                             System.out.println("Saindo...");
                             return;
                         default:
@@ -173,3 +175,5 @@ public class Main {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         System.out.printf("Valor total dos salários: %,.2f%n", totalSalarios);
     }
+    }
+
