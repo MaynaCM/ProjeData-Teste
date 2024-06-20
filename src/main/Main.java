@@ -40,8 +40,10 @@ public class Main {
                             mostrarMaisVelho();
                             break;
                         case 7:
+                            ordenarPorNome();
                             break;
                         case 8:
+                            mostrarSalarioTotal();
                             break;
                         case 9:
                             break;
@@ -157,3 +159,17 @@ public class Main {
         System.out.printf("O funcionário mais velho é: Nome: %s, Idade: %d%n", maisVelho.getNome(), idade);
     }
 
+    private static void ordenarPorNome() {
+        List<Funcionario> funcionariosOrdenados = new ArrayList<>(funcionarios);
+        funcionariosOrdenados.sort(Comparator.comparing(Funcionario::getNome));
+        for (Funcionario funcionario : funcionariosOrdenados) {
+            System.out.printf("Nome: %s%n", funcionario.getNome());
+        }
+    }
+    
+    private static void mostrarSalarioTotal() {
+        BigDecimal totalSalarios = funcionarios.stream()
+                .map(Funcionario::getSalario)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        System.out.printf("Valor total dos salários: %,.2f%n", totalSalarios);
+    }
