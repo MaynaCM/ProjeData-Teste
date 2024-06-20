@@ -1,5 +1,9 @@
 import java.time.LocalDate;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
+import java.util.*;
+
 
 import classes.Funcionario;
 
@@ -24,8 +28,10 @@ public class Main {
                             exibirFuncionarios();
                             break;
                         case 3:
+                            aplicarAumento();
                             break;
                         case 4:
+                            agruparPorFuncao();
                             break;
                         case 5:
                             break;
@@ -83,4 +89,27 @@ public class Main {
         funcionarios.add(new Funcionario("Laura", LocalDate.of(1994, 7, 8), new BigDecimal("3017.45"), "Gerente"));
         funcionarios.add(new Funcionario("Heloísa", LocalDate.of(2003, 5, 24), new BigDecimal("1606.85"), "Eletricista"));
         funcionarios.add(new Funcionario("Helena", LocalDate.of(1996, 9, 2), new BigDecimal("2799.93"), "Gerente"));
+    }
+
+    private static void aplicarAumento() {
+        for (Funcionario funcionario : funcionarios) {
+            BigDecimal aumento = funcionario.getSalario().multiply(new BigDecimal("0.10"));
+            funcionario.setSalario(funcionario.getSalario().add(aumento));
+        }
+        System.out.println("Aumento de 10% aplicado a todos os funcionários!!");
+    }
+
+    private static void agruparPorFuncao() {
+        Map<String, List<Funcionario>> funcionariosPorFuncao = funcionarios.stream()
+                .collect(Collectors.groupingBy(Funcionario::getFuncao));
+        for (Map.Entry<String, List<Funcionario>> entry : funcionariosPorFuncao.entrySet()) {
+            System.out.println("\nFunção: " + entry.getKey());
+            for (Funcionario funcionario : entry.getValue()) {
+                System.out.printf("Nome: %s, Data Nascimento: %s, Salário: %,.2f, Função: %s%n",
+                        funcionario.getNome(), 
+                        funcionario.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 
+                        funcionario.getSalario(), 
+                        funcionario.getFuncao());
+            }
+        }
     }
