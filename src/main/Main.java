@@ -2,11 +2,11 @@ import java.time.LocalDate;
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
+import java.time.Month;
 import java.util.*;
 
 
 import classes.Funcionario;
-
 
 public class Main {
 
@@ -34,8 +34,10 @@ public class Main {
                             agruparPorFuncao();
                             break;
                         case 5:
+                            mostrarAniversariantes();
                             break;
                         case 6:
+                            mostrarMaisVelho();
                             break;
                         case 7:
                             break;
@@ -91,6 +93,25 @@ public class Main {
         funcionarios.add(new Funcionario("Helena", LocalDate.of(1996, 9, 2), new BigDecimal("2799.93"), "Gerente"));
     }
 
+    private static void removerFuncionario() {
+        funcionarios.removeIf(funcionario -> funcionario.getNome().equals("João"));
+        System.out.println("Funcionário 'João' removido.");
+    }
+    
+    private static void exibirFuncionarios() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
+        System.out.println("Funcionários Cadastrados:");
+    
+        for (Funcionario funcionario : funcionarios) {
+            System.out.printf("Nome: %s, Data Nascimento: %s, Salário: %,.2f, Função: %s%n",
+                    funcionario.getNome(), 
+                    funcionario.getDataNascimento().format(formatter), 
+                    funcionario.getSalario(), 
+                    funcionario.getFuncao());
+        }
+    }
+
     private static void aplicarAumento() {
         for (Funcionario funcionario : funcionarios) {
             BigDecimal aumento = funcionario.getSalario().multiply(new BigDecimal("0.10"));
@@ -113,3 +134,26 @@ public class Main {
             }
         }
     }
+
+    private static void mostrarAniversariantes() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (Funcionario funcionario : funcionarios) {
+            if (funcionario.getDataNascimento().getMonth() == Month.OCTOBER || 
+                funcionario.getDataNascimento().getMonth() == Month.DECEMBER) {
+                System.out.printf("Nome: %s, Data Nascimento: %s%n",
+                        funcionario.getNome(), 
+                        funcionario.getDataNascimento().format(formatter));
+            }
+        }
+    }
+    
+    private static void mostrarMaisVelho() {
+        Funcionario maisVelho = Collections.min(funcionarios, Comparator.comparing(Funcionario::getDataNascimento));
+        LocalDate hoje = LocalDate.now();
+        int idade = hoje.getYear() - maisVelho.getDataNascimento().getYear();
+        if (hoje.getDayOfYear() < maisVelho.getDataNascimento().getDayOfYear()) {
+            idade--;
+        }
+        System.out.printf("O funcionário mais velho é: Nome: %s, Idade: %d%n", maisVelho.getNome(), idade);
+    }
+
